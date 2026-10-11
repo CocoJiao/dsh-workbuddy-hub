@@ -172,6 +172,25 @@ POST {billingBase}/v2/billing/meter/get-user-resource
 
 台账写在 `~/.dsh/workbuddy-checkin-ledger.json`。
 
+### 限流冷却（CD）自动登记
+
+**为什么要做**：用户实测撞上 429 后，台账里**没有记录** —— 因为原来只有手动命令
+（`workbuddy-ledger.cjs limit --text "..."`），没人跑就永远记不上。
+
+**现在三层保障**：
+
+| 机制 | 触发 | 说明 |
+|---|---|---|
+| **主动探测** | **每 10 分钟自动** | 逐账号发一次 `max_tokens:1` 的轻量请求；撞到 429 自动登记（含解禁时间），**探到可用则自动清除 CD 记录** |
+| 报错上报 | `POST /dsh-workbuddy-hub/ledger/record` | 把 DSH 的 429 报错原文 POST 过去，自动识别账号（缺省=当前登录账号）与解禁时间 |
+| 手动探测 | `POST /dsh-workbuddy-hub/ledger/probe` | 立即跑一轮，不必等定时器 |
+
+查看台账：`GET /dsh-workbuddy-hub/ledger`（含探测调度状态）
+清理过期：`POST /dsh-workbuddy-hub/ledger` 或加 `?clear=1`
+
+**探测成本**：`max_tokens: 1`，可忽略；被限流的账号不消耗额度。
+账号之间间隔 1.5 秒，避免探测本身把账号打成限流。
+
 ### 操作：一键切号
 
 悬浮球里点「切到此账号」→ 优先走本地 API（若有），不可用时**自动回落内置切号逻辑**
