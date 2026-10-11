@@ -1,0 +1,22 @@
+# dsh-workbuddy-hub — WorkBuddy 转接中枢 + 多账号台账.
+#
+# ONE plugin, two halves plus a vendored provider:
+#   * provider (vendored from dsh-workbuddy-connect, MIT): registers the
+#     `workbuddy` LLM provider so WorkBuddy's models work inside DSH. It is
+#     vendored rather than reimplemented because credential decryption requires
+#     WorkBuddy's own Electron binary — see lib/vendor/LICENSE.connect.txt.
+#   * host half (lib/index.js): account ledger routes under /dsh-workbuddy-hub.
+#   * client half (lib/client.js): the draggable floating ball + drawer, native
+#     DOM only (an iframe is unusable in the desktop shell).
+#
+# The `id` / `name` below MUST stay identical to the `name` field in
+# package.json and to the `id` passed to __ModuleLoader__.load in
+# lib/client.js — a short name makes the client fail with
+# "loaded without registering via __ModuleLoader__.load".
+#
+# NOTE: this plugin takes over the same provider id (`workbuddy`) that
+# dsh-workbuddy-connect registers. DSH rejects duplicate provider ids
+# all-or-nothing, so install ONE of them, never both.
+- insert:
+    - id: dsh-workbuddy-hub
+      name: dsh-workbuddy-hub
