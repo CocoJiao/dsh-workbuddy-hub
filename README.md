@@ -1,4 +1,6 @@
-# dsh-workbuddy-hub
+# dsh-workbuddy-hub （显示名：**Workhoney**）
+
+> 界面/看板上显示为 **Workhoney**；`dsh-workbuddy-hub` 是包名（内部标识）。
 
 **WorkBuddy 转接中枢** —— 一个插件同时提供两件事：
 
