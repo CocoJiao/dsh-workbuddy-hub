@@ -2,6 +2,20 @@
 
 > 界面/看板上显示为 **Workhoney**；`dsh-workbuddy-hub` 是包名（内部标识）。
 
+## 效果图
+
+**悬浮球抽屉** —— 多账号台账、实时额度、限流标记、一键切号：
+
+![悬浮球抽屉](docs/images/drawer.png)
+
+**网页版看板** —— 宽屏表格、冷却队列、实时总额度（`GET /dsh-workbuddy-hub/board`）：
+
+![网页版看板](docs/images/web-board.png)
+
+**限流冷却（CD）自动登记** —— 后台每 10 分钟主动探测，撞到 429 自动记录并解析解禁时间：
+
+![冷却队列](docs/images/cooldown.png)
+
 **WorkBuddy 转接中枢** —— 一个插件同时提供两件事：
 
 1. **转接（provider）**：把 WorkBuddy 桌面端的模型接进 DeepSeek Harness，像官方 provider 一样出现在模型选择器里。
