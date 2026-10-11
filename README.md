@@ -133,13 +133,34 @@ Deepseek-V4.1-Flash、GLM、Kimi 等（实测 32 个）。
 
 | 信息 | 说明 |
 |---|---|
-| 手机号 / 昵称 | **一律脱敏**（`156****9121` / `好…来`） |
+| 手机号 / 昵称 | **一律脱敏**（`156****912*` / `好…来`）—— 后四位只露 3 位 |
+| **实时额度**（上游权威） | 每账号的真实总额度与剩余，来源 `POST /v2/billing/meter/get-user-resource` |
+| **套餐数 + 即将到期** | 有套餐 3 天内到期会标 ⚠（建议优先用快作废的） |
 | 剩余积分 + **有效期分段** | 3 天内到期的会标 ⚠ |
 | **签到状态** | 含每日自动签到结果 |
 | **限流冷却 CD** | 自建台账（`~/.dsh/workbuddy-rate-limit-ledger.json`） |
 | 今日用量 | 带 `synced` 标志，**区分「0」与「未采集」** |
 
 **轮换顺序**：可用 → 积分最早过期（先花快作废的）→ 今日用得少 → 余额多。
+
+### 实时额度（替换掉拿不到的「今日用量」）
+
+原有的「今日用量 / 今日请求数」在 WorkDaddy 卸载后**无法统计**：
+原数据源（它的 `credit-usage.db`）已删除，且**上游没有任何用量查询端点**（实测 8 个候选路径全 404）。
+
+但上游提供了**逐套餐的额度接口**，信息反而更准确：
+
+```
+POST {billingBase}/v2/billing/meter/get-user-resource
+     body: { ProductCode: "p_tcaca", Status: [0,3], ... }
+返回: CapacitySize / CapacityUsed / CapacityRemain  总额度 / 已用 / 剩余
+      CycleStartTime / CycleEndTime                  周期（= 积分有效期）
+      DeductionEndTime                               扣费截止（过期时间戳）
+      PackageName / SubProductName                   套餐名
+```
+
+因此 UI 用 **「实时额度 + 套餐数 + 即将到期数」** 替换了那两个指标。
+**这与切号无关**：它逐账号解密凭据后直接查上游，不需要该账号是当前登录账号。
 
 ### 签到（含每日自动签到）
 
