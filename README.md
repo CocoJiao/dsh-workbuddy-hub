@@ -4,17 +4,19 @@
 
 ## 效果图
 
-**悬浮球抽屉** —— 多账号台账、实时额度、限流标记、一键切号：
+**① 网页界面** —— 宽屏台账表格、实时额度、限流状态、积分有效期分段
+（`GET /dsh-workbuddy-hub/board`，或抽屉里点「网页版」）：
 
-![悬浮球抽屉](docs/images/drawer.png)
+![网页界面](docs/images/web-board.png)
 
-**网页版看板** —— 宽屏表格、冷却队列、实时总额度（`GET /dsh-workbuddy-hub/board`）：
+**② 悬浮球主界面** —— 多账号台账、一键切号、签到状态、实时额度：
 
-![网页版看板](docs/images/web-board.png)
+![悬浮球主界面](docs/images/drawer.png)
 
-**限流冷却（CD）自动登记** —— 后台每 10 分钟主动探测，撞到 429 自动记录并解析解禁时间：
+**③ 悬浮球里的 DeepSeek-V4.1-Flash 冷却时间** ——
+显示该模型下被限流的账号与精确解禁倒计时（后台每 10 分钟主动探测自动登记）：
 
-![冷却队列](docs/images/cooldown.png)
+![DeepSeek-V4.1-Flash 冷却时间](docs/images/cooldown.png)
 
 **WorkBuddy 转接中枢** —— 一个插件同时提供两件事：
 
